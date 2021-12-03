@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './App.css';
 import SingleCard from './components/SingleCard';
 
-const cardsImages = [
+const cardImages = [
   { src: '/img/helmet-1.png' },
   { src: '/img/potion-1.png' },
   { src: '/img/ring-1.png' },
@@ -13,24 +13,34 @@ const cardsImages = [
 
 function App() {
   const [cards, setCards] = useState([]);
-  const [turn, setTurn] = useState(0);
+  const [turns, setTurns] = useState(0);
+  const [choiceOne, setChoiceOne] = useState(null);
+  const [choiceTwo, setChoiceTwo] = useState(null);
 
-  const sheffleCard = () => {
-    const sheffledCards = [...cardsImages, ...cardsImages]
+  // shuffle cards for new game
+  const shuffleCards = () => {
+    const shuffledCards = [...cardImages, ...cardImages]
       .sort(() => Math.random() - 0.5)
       .map((card) => ({ ...card, id: Math.random() }));
 
-    setCards(sheffledCards);
-    setTurn(0);
+    setCards(shuffledCards);
+    setTurns(0);
   };
+
+  // handle a choice
+  const handleChoice = (card) => {
+    console.log(card);
+    choiceOne ? setChoiceTwo(card) : setChoiceOne(card);
+  };
+
   return (
     <div className='App'>
       <h1>Magic Match</h1>
-      <button onClick={sheffleCard}>New Game</button>
+      <button onClick={shuffleCards}>New Game</button>
 
       <div className='card-grid'>
         {cards.map((card) => (
-          <SingleCard card={card} key={card.id} />
+          <SingleCard key={card.id} card={card} handleChoice={handleChoice} />
         ))}
       </div>
     </div>
